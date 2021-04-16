@@ -45,6 +45,7 @@ pipeline {
             steps {
                  echo "Create Host Env"
                 sh '/home/apictl/apictl version'
+                sh '/home/apictl/apictl remove env dev'
                 sh '/home/apictl/apictl add-env -e host --apim http://localhost:9443 --token  http://localhost:9443/token'
                 echo "Logging into $LOCAL_ENV"
                 withCredentials([usernamePassword(credentialsId: 'apim_local', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
