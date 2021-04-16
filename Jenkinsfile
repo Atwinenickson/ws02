@@ -24,7 +24,7 @@ pipeline {
                 echo 'Create a dev environment'
                 sh '/home/apictl/apictl version'
                 sh '/home/apictl/apictl remove env dev'
-                sh '/home/apictl/apictl add-env -e dev --apim https://192.168.0.113:9443/ --token  https://192.168.0.113:8243/token --registration http://192.168.0.113:9763' 
+                sh '/home/apictl/apictl add-env -e dev --apim https://localhost:9443/ --token  https://localhost:8243/token --registration http://localhost:9763' 
                 echo 'Logging into $DEV_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
                     sh '/home/apictl/apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
