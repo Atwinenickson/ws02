@@ -24,7 +24,7 @@ pipeline {
                 echo 'Create a dev environment'
                 sh '/home/apictl/apictl version'
                 sh '/home/apictl/apictl remove env dev'
-                sh '/home/apictl/apictl add-env -e dev --apim http://192.168.0.113:9443/ --token  http://192.168.0.113:8243/token' 
+                sh '/home/apictl/apictl add-env -e dev --apim https://192.168.0.113:9443/ --token  https://192.168.0.113:8243/token --registration http://192.168.0.113:9763/client-registration/v0.17/register' 
                 echo 'Logging into $DEV_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
                     sh '/home/apictl/apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
@@ -47,7 +47,7 @@ pipeline {
                  echo "Create Host Env"
                 sh '/home/apictl/apictl version'
                 sh '/home/apictl/apictl remove env host'
-                sh '/home/apictl/apictl add-env -e host --apim http://localhost:9443 --token  http://localhost:9443/token'
+                sh '/home/apictl/apictl add-env -e host --apim http://localhost:9443 --token  http://localhost:9443/token --registration http://localhost:9763/client-registration/v0.17/register'
                 echo "Logging into $LOCAL_ENV"
                 withCredentials([usernamePassword(credentialsId: 'apim_local', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
                     sh '/home/apictl/apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
