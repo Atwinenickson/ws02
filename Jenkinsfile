@@ -21,8 +21,10 @@ pipeline {
                 RETRY = '80'
             }
             steps {
-                echo 'Logging into $DEV_ENV'
+                echo 'Create a dev environment'
                 sh '/home/apictl/apictl version'
+                sh '/home/apictl/apictl apictl add-env -e dev --apim https://192.168.0.113:9443/ --token  https://192.168.0.113:8243/token' 
+                echo 'Logging into $DEV_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
                     sh '/home/apictl/apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
                 }
@@ -41,7 +43,10 @@ pipeline {
                 RETRY = '60'
             }
             steps {
-                sh 'echo "Logging into $LOCAL_ENV"'
+                 echo "Create Host Env"
+                sh '/home/apictl/apictl version'
+                sh '/home/apictl/apictl apictl add-env -e host --apim https://localhost:9443 --token  https://localhost:9443/token'
+                echo "Logging into $LOCAL_ENV"
                 withCredentials([usernamePassword(credentialsId: 'apim_local', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
                     sh '/home/apictl/apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
                 }
