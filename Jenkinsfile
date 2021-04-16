@@ -5,7 +5,7 @@ pipeline {
         CI = 'true'
         API_DIR = './TestStore'
         DEV_ENV = 'dev'
-        LOCAL_ENV = 'local'
+        LOCAL_ENV = 'host'
         TEST_SCRIPT_FILE = 'sample.store.dev.postman_collection.json'        
     }
     stages {
@@ -22,11 +22,12 @@ pipeline {
             }
             steps {
                 echo 'Logging into $DEV_ENV'
-                withCredentials([usernamePassword(credentialsId: 'root', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
-                    sh 'apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
+                sh '/home/apictl/apictl version'
+                withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
+                    sh '/home/apictl/apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
                 }
                 echo 'Deploying to $DEV_ENV'
-                sh 'apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
+                sh '/home/apictl/apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
             }
         }
         stage('Run Tests') {
@@ -41,11 +42,11 @@ pipeline {
             }
             steps {
                 sh 'echo "Logging into $LOCAL_ENV"'
-                withCredentials([usernamePassword(credentialsId: 'root', usernameVariable: 'PROD_USERNAME', passwordVariable: 'PROD_PASSWORD')]) {
-                    sh 'apictl login $LOCAL_ENV -u $PROD_USERNAME -p $PROD_PASSWORD -k'                        
+                withCredentials([usernamePassword(credentialsId: 'apim_local', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
+                    sh '/home/apictl/apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
                 }
-                echo 'Deploying to Production'
-                sh 'apictl import-api -f $API_DIR -e $LOCAL_ENV -k --preserve-provider --update --verbose'
+                echo 'Deploying to Local'
+                sh '/home/apictl/apictl import-api -f $API_DIR -e $LOCAL_ENV -k --preserve-provider --update --verbose'
             }
         }
     }
