@@ -5,7 +5,6 @@ pipeline {
         CI = 'true'
         API_DIR = './TestStore'
         DEV_ENV = 'dev'
-        LOCAL_ENV = 'host'
         TEST_SCRIPT_FILE = 'sample.store.dev.postman_collection.json'        
     }
     stages {
@@ -23,8 +22,6 @@ pipeline {
             steps {
                 echo 'Create a dev environment'
                 sh '/home/apictl/apictl version'
-                sh '/home/apictl/apictl remove env dev'
-                sh '/home/apictl/apictl add-env -e dev --apim https://192.168.0.113:9443 --token  https://192.168.0.113:8243/token --registration http://192.168.0.113:9763' 
                 echo 'Logging into $DEV_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
                     sh '/home/apictl/apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
@@ -39,24 +36,6 @@ pipeline {
                 sh 'newman run $API_DIR/$TEST_SCRIPT_FILE --insecure' 
             }
         }
-        stage('Deploy to Local Environment') {
-            environment{
-                RETRY = '60'
-            }
-            steps {
-                 echo "Create Host Env"
-                sh '/home/apictl/apictl version'
-                sh '/home/apictl/apictl remove env host'
-                sh '/home/apictl/apictl add-env -e host --apim http://localhost:9443 --token  http://localhost:9443/token --registration http://localhost:9763'
-                echo "Logging into $LOCAL_ENV"
-                withCredentials([usernamePassword(credentialsId: 'apim_local', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
-                    sh '/home/apictl/apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
-                }
-                echo 'Deploying to Local'
-                sh '/home/apictl/apictl import-api -f $API_DIR -e $LOCAL_ENV -k --preserve-provider --update --verbose'
-            }
-        }
-    }
     post {
         cleanup {
             deleteDir()
