@@ -22,8 +22,7 @@ pipeline {
             }
             steps {
                 echo 'Create a dev environment'
-                sh '/home/apictl/apictl version'
-                sh '/home/apictl/apictl remove env dev'
+                sh '/home/apictl/apictl list envs'
                 echo 'Logging into $DEV_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
                     sh '/home/apictl/apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
