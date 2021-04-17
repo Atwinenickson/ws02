@@ -12,7 +12,7 @@ pipeline {
         stage('Preparation') {
             steps{
                 git branch: "master",
-                url: 'http://192.168.0.82:4000/root/jenkinspipeline',
+                url: 'https://github.com/Atwinenickson/ws02',
                 credentialsId: 'root'
             }
         }
@@ -22,19 +22,35 @@ pipeline {
             }
             steps {
                 echo 'Create a dev environment'
-                sh '/var/jenkins_home/workspace/apictl/apictl list envs'
+                sh 'apictl list envs'
                 echo 'Logging into $DEV_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
-                    sh '/var/jenkins_home/workspace/apictl/apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
+                    sh 'apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
                 }
                 echo 'Deploying to $DEV_ENV'
-                sh '/var/jenkins_home/workspace/apictl/apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
+                sh 'apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
             }
         }
         stage('Run Tests') {
             steps {
                 echo 'Running tests in $DEV_ENV'
                 sh 'newman run $API_DIR/$TEST_SCRIPT_FILE --insecure' 
+            }
+        }
+        
+           stage('Deploy to Local') {
+            environment{
+                RETRY = '80'
+            }
+            steps {
+                echo 'Create a local environment'
+                sh 'apictl list envs'
+                echo 'Logging into $LOCAL_ENV'
+                withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
+                    sh 'apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
+                }
+                echo 'Deploying to $LOCAL_ENV'
+                sh 'apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
             }
         }
     }
