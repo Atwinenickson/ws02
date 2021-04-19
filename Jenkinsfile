@@ -44,10 +44,10 @@ pipeline {
             }
             steps {
                 echo 'Create a local environment'
-                sh '/home/atwine/apictl/apictl list envs'
+                sh '/home/atwine/Pictures/apictl list envs'
                 echo 'Logging into $LOCAL_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
-                    sh 'apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
+                    sh '/home/atwine/Pictures/apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
                 }
                 echo 'Deploying to $LOCAL_ENV'
                 sh 'apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
