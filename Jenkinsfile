@@ -12,7 +12,7 @@ pipeline {
         stage('Preparation') {
             steps{
                 git branch: "master",
-                url: 'https://github.com/Atwinenickson/ws02',
+                url: 'https://github.com/Atwinenickson/ws02.git',
                 credentialsId: 'root'
             }
         }
