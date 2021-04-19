@@ -6,7 +6,7 @@ pipeline {
         API_DIR = '/var/lib/jenkins/workspace/WSO2'
         DEV_ENV = 'dev'
         LOCAL_ENV = 'host'
-        TEST_SCRIPT_FILE = 'sample.store.dev.postman_collection.json'        
+        TEST_SCRIPT_FILE = 'sample_store.postman_collection.json'        
     }
     stages {
         stage('Preparation') {
