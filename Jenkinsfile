@@ -39,22 +39,5 @@ pipeline {
                 sh 'newman run $API_DIR/$TEST_SCRIPT_FILE --insecure' 
             }
         }
-        
-           stage('Deploy to Local') {
-            environment{
-                RETRY = '80'
-            }
-            steps {
-                echo 'Create a local environment'
-                sh '/home/atwine/Pictures/apictl/apictl list envs'
-                sh '/home/atwine/Pictures/apictl/apictl add-env -e host --apim https://localhost:9444'
-                echo 'Logging into $LOCAL_ENV'
-                withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
-                    sh '/home/atwine/Pictures/apictl/apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
-                }
-                echo 'Deploying to $LOCAL_ENV'
-                sh '/home/atwine/Pictures/apictl/apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
-            }
-        }
     }
 }
