@@ -40,7 +40,6 @@ pipeline {
             }
             steps {
                 echo 'Create a production environment'
-                sh '/home/atwine/Pictures/apictl/apictl remove env prod'
                 sh '/home/atwine/Pictures/apictl/apictl list envs'
                 sh '/home/atwine/Pictures/apictl/apictl add-env -e prod --apim https://192.168.0.113:9443'
                 echo 'Logging into $PROD_ENV'
