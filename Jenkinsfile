@@ -3,7 +3,7 @@ pipeline {
     tools {nodejs "Node"}
     environment {
         CI = 'true'
-        API_DIR = './WS02'
+        API_DIR = '/var/lib/jenkins/workspace/WSO2'
         DEV_ENV = 'dev'
         LOCAL_ENV = 'host'
         TEST_SCRIPT_FILE = 'sample.store.dev.postman_collection.json'        
