@@ -3,7 +3,7 @@ pipeline {
     tools {nodejs "Node"}
     environment {
         CI = 'true'
-        API_DIR = './TestStore'
+        API_DIR = '/home/atwine/Pictures/TESTS/local/TestStore/'
         DEV_ENV = 'dev'
         LOCAL_ENV = 'host'
         TEST_SCRIPT_FILE = 'sample.store.dev.postman_collection.json'        
