@@ -8,7 +8,17 @@ environments:
       sandbox:
         url: http://dev.sandbox.wso2.com:9090/samplestore
         config:
-          retryTimeOut: $RETRY   
+          retryTimeOut: $RETRY
+  - name: prod
+    endpoints:
+      production:
+        url: http://prod.wso2.com:9090/samplestore
+        config:
+          retryTimeOut: $RETRY
+      sandbox:
+        url: http://prod.sandbox.wso2.com:9090/samplestore
+        config:
+          retryTimeOut: $RETRY 
 deploy:
   import:
     update: true

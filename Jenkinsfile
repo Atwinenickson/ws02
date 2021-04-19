@@ -5,7 +5,7 @@ pipeline {
         CI = 'true'
         API_DIR = '/var/lib/jenkins/workspace/WSO2'
         DEV_ENV = 'dev'
-        LOCAL_ENV = 'host'
+        PROD_ENV = 'prod'
         TEST_SCRIPT_FILE = 'sample_store.postman_collection.json'        
     }
     stages {
@@ -33,11 +33,24 @@ pipeline {
                 sh '/home/atwine/Pictures/apictl/apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
             }
         }
-        stage('Run Tests') {
+        
+               stage('Deploy to PROD') {
+            environment{
+                RETRY = '80'
+            }
             steps {
-                echo 'Running tests in $DEV_ENV'
-                sh 'newman run $API_DIR/$TEST_SCRIPT_FILE --insecure' 
+                echo 'Create a production environment'
+                sh '/home/atwine/Pictures/apictl/apictl remove env prod'
+                sh '/home/atwine/Pictures/apictl/apictl list envs'
+                sh '/home/atwine/Pictures/apictl/apictl add-env -e prod --apim https://192.168.0.113:9443'
+                echo 'Logging into $PROD_ENV'
+                withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
+                    sh '/home/atwine/Pictures/apictl/apictl login $PROD_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
+                }
+                echo 'Deploying to $PROD_ENV'
+                sh '/home/atwine/Pictures/apictl/apictl import-api -f $API_DIR -e $PROD_ENV -k --preserve-provider --update --verbose'
             }
         }
+      
     }
 }
