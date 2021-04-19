@@ -23,6 +23,7 @@ pipeline {
             steps {
                 echo 'Create a dev environment'
                 sh '/home/atwine/Pictures/apictl/apictl list envs'
+                sh '/home/atwine/Pictures/apictl/apictl add-env -e dev --apim https://localhost:9444'
                 echo 'Logging into $DEV_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
                     sh '/home/atwine/Pictures/apictl/apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
@@ -45,6 +46,7 @@ pipeline {
             steps {
                 echo 'Create a local environment'
                 sh '/home/atwine/Pictures/apictl/apictl list envs'
+                sh '/home/atwine/Pictures/apictl/apictl add-env -e host --apim https://localhost:9444'
                 echo 'Logging into $LOCAL_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
                     sh '/home/atwine/Pictures/apictl/apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
