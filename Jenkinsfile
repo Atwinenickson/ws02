@@ -22,6 +22,7 @@ pipeline {
             }
             steps {
                 echo 'Create a dev environment'
+                sh '/home/atwine/Pictures/apictl/apictl remove env dev'
                 sh '/home/atwine/Pictures/apictl/apictl list envs'
                 sh '/home/atwine/Pictures/apictl/apictl add-env -e dev --apim https://localhost:9444'
                 echo 'Logging into $DEV_ENV'
@@ -29,7 +30,7 @@ pipeline {
                     sh '/home/atwine/Pictures/apictl/apictl login $DEV_ENV -u $DEV_USERNAME -p $DEV_PASSWORD -k'                        
                 }
                 echo 'Deploying to $DEV_ENV'
-                sh 'apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
+                sh '/home/atwine/Pictures/apictl/apictl import-api -f $API_DIR -e $DEV_ENV -k --preserve-provider --update --verbose'
             }
         }
         stage('Run Tests') {
