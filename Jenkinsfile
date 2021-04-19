@@ -44,7 +44,7 @@ pipeline {
             }
             steps {
                 echo 'Create a local environment'
-                sh 'apictl list envs'
+                sh '/home/atwine/apictl/apictl list envs'
                 echo 'Logging into $LOCAL_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'LOCAL_USERNAME', passwordVariable: 'LOCAL_PASSWORD')]) {
                     sh 'apictl login $LOCAL_ENV -u $LOCAL_USERNAME -p $LOCAL_PASSWORD -k'                        
