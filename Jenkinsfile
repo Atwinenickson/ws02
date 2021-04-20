@@ -23,8 +23,8 @@ pipeline {
             }
             steps {
                 echo 'Create a dev environment'
-                sh '/home/atwine/Pictures/apictl/apictl remove env dev'
                 sh '/home/atwine/Pictures/apictl/apictl list envs'
+                sh '/home/atwine/Pictures/apictl/apictl remove env dev'
                 sh '/home/atwine/Pictures/apictl/apictl add-env -e dev --apim https://localhost:9444'
                 echo 'Logging into $DEV_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
@@ -42,6 +42,7 @@ pipeline {
             steps {
                 echo 'Create a production environment'
                 sh '/home/atwine/Pictures/apictl/apictl list envs'
+                sh '/home/atwine/Pictures/apictl/apictl remove env prod'
                 sh '/home/atwine/Pictures/apictl/apictl add-env -e prod --apim https://192.168.0.113:9443'
                 echo 'Logging into $PROD_ENV'
                 withCredentials([usernamePassword(credentialsId: 'apim_dev', usernameVariable: 'DEV_USERNAME', passwordVariable: 'DEV_PASSWORD')]) {
