@@ -6,7 +6,8 @@ pipeline {
         API_DIR = '/var/lib/jenkins/workspace/WSO2'
         DEV_ENV = 'dev'
         PROD_ENV = 'prod'
-        TEST_SCRIPT_FILE = 'sample_store.postman_collection.json'        
+        TEST_SCRIPT_FILE = 'movie.postman_collection.json'    
+        ENV_SCRIPT_FILE = 'MovieUserDev.postman_environment.json'        
     }
     stages {
         stage('Preparation') {
@@ -50,6 +51,12 @@ pipeline {
                 sh '/home/atwine/Pictures/apictl/apictl import-api -f $API_DIR -e $PROD_ENV -k --preserve-provider --update --verbose'
             }
         }
+        
+          stage('Run Tests') {
+            steps {
+                echo 'Running tests in $DEV_ENV'
+                sh 'newman run $API_DIR/$TEST_SCRIPT_FILE --environment  $API_DIR/$ENV_SCRIPT_FILE --insecure' 
+            }
       
     }
 }
